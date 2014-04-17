@@ -4,141 +4,12 @@ It simplyfies the C API by using BLOBs as vectors and TEXT as strings and makes 
 To provide a single versioned library the SQLite3 is included in the SQLite3 folder and updated when necessary.
 
 
-## Classes
-
-### field_type
-This class represents a singe result field (column field of a row).
-
-SQLite has 5 data types:
-| SQLite3 type | sqlitepp type |
-|--------------|---------------|
-| INTEGER | `std::int64_t` |
-| FLOAT | `double` |
-| TEXT | `std::string` |
-| BLOB | `std::vector<std::uint8_t>` |
-| NULL | internally handled, checked by `is_null()` |
-
-Use these sqlitepp types when accessing result fields.
-There is an automatic type conversion/cast:
-```c++
-int i = row["num"];         // get data of num field (INTEGER) as integer
-std::string s = row["num"]; // get data of num field (INTEGER) as string
-double d = row["flo"];      // get data of flo field (FLOAT) as double
-// CAUTION:
-int f = row["flo"];         // ERROR: integer result flo field (FLOAT) is not defined/set!
-```
-
-Methods of `field_type` are:
-
-`name()`
-Returns the name of the field column.
-
-`type()`
-Returns the field type as sqlite3 type definition (SQLITE_INTEGER, SQLITE_TEXT etc.)
-
-`is_null()`
-Returns true if the field is NULL.
-
-
-### row
-This class represents a single result row.
-Fields can be accessed via the `[]` operator by their numeric column index or by their column name.
-Access by name is slower, because of the name lookup.
-
-All std::vector operations are valid, because `row` is a std::vector of `field_type`.
-
-Methods of `row` are:
-
-`operator[](size_type idx)`
-Access the field by its index position in the row.
-
-`operator[](const char* colname)`
-Access the field by its column name.
-
-`num_fields()`
-Returns the field count of the row. (A wrapper for size())
-
-
-### result
-This class is a std::vector of `row`. It represents a complete result set.
-
-Methods of `result` are:
-
-`num_rows()`
-Returns the number of rows of the result. (A wrapper for size())
-
-
-### db
-Main class that holds the sqlite3 object, which can be accessed via `get()` or, even shorter, via the `()` operator.
-
-Methods of `db` are:
-
-`db(name, initial_open = true, flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE)`
-Ctor which creates and optionally opens the database.
-
-`open(flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE)`
-Opens the database with the apropriate access flags.
-
-`close()`
-Closes the db. The db is automatically closed when db goes out of scope.
-
-`version()`
-Returns the version of the SQLite3 database as string.
-
-`vacuum()`
-Executes the SQLite VACUUM command for database defragmentation.
-
-
-### query
-Class for query assembly and execution.
-The `<<` operator can add query parts or bind BLOB and TEXT data.
-
-`exec()`
-Executes the query and returns only the execution status. This can be used for commands like UPDATE or DELETE.
-
-`use()`
-Executes the query and returns the first row of the result set. This can be uses if only one row is needed or to get the result set row by row.
-Repeatly call `use_next()` until `use_next()` returns an empty row or call `use_abort()` before.
-
-`use_next()`
-Returns the next row of the `use()` function.
-An empty row is returned if no further rows exist.
-
-`use_abort()`
-Aborts `use()`/`use_next()` sequence before `use_next()` finished (returned an empty row).
-This is a **MANDATORY** call if `use()`/`use_next()` need to be aborted.
-
-`store()`
-Executes the query and returns the complete result as result object.
-
-`bind()`
-Binds the given vector or string to the according params.
-CAUTION: The vector or string must be constant until end of query execution!
-The vector/string is internally not copied!
-
-
-### transaction
-The `transaction` class simplifies begin, commit and rollback of transactions.
-`begin()` is called by class ctor, so an explicit `begin()` isn't necessary.
-
-Methods are:
-
-`begin()`
-Begin the transaction with the according level flags. Default is deferred.
-
-`commit()`
-Commit the transaction.
-
-`rollback()`
-Rollback the transaction. Rollback is called by the dtor when transaction object goes out of scope.
-
-
 ## Usage
-Here are some examples how to use sqlitepp:
+This are examples how to use sqlitepp.
 
 Create and open the database by its filename:
 ```c++
-sqlitepp::db db(TEST_DB);
+sqlitepp::db db("D:/test.sqlite");
 assert(db.is_open());
 ```
 The following code asumes this db object.
@@ -195,7 +66,7 @@ All text and string values need to be in UTF-8 format in SQLite3.
 Storing a string in UTF-8 - here on a Windows platform with ATL conversion:
 ```c++
 sqlitepp::query q(db);
-q << "INSERT INTO test(id, name) VALUES (13,'" << ATL::CT2CA(L"Schöne Grüße", CP_UTF8) << "')";
+q << "INSERT INTO test(id, name) VALUES (13,'" << ATL::CT2CA(L"Schï¿½ne Grï¿½ï¿½e", CP_UTF8) << "')";
 int err = q.exec();
 ```
 
@@ -310,6 +181,135 @@ Rollback when the transaction goes out scope:
 ```
 
 
+## Classes
+
+### field_type
+This class represents a singe result field (column field of a row).
+
+SQLite has 5 data types:
+
+| SQLite3 type | sqlitepp type |
+|--------------|---------------|
+| INTEGER | `std::int64_t` |
+| FLOAT | `double` |
+| TEXT | `std::string` |
+| BLOB | `std::vector<std::uint8_t>` |
+| NULL | internally handled, checked by `is_null()` |
+
+Use these sqlitepp types when accessing result fields.
+There is an automatic type conversion/cast:
+```c++
+int i = row["num"];         // get data of num field (INTEGER) as integer
+std::string s = row["num"]; // get data of num field (INTEGER) as string
+double d = row["flo"];      // get data of flo field (FLOAT) as double
+// CAUTION:
+int f = row["flo"];         // ERROR: integer result flo field (FLOAT) is not defined/set!
+```
+
+Methods of `field_type` are:
+
+`name()`  
+Returns the name of the field column.
+
+`type()`  
+Returns the field type as sqlite3 type definition (SQLITE_INTEGER, SQLITE_TEXT etc.)
+
+`is_null()`  
+Returns true if the field is NULL.
+
+
+### row
+This class represents a single result row.
+Fields can be accessed via the `[]` operator by their numeric column index or by their column name.
+Access by name is slower, because of the name lookup.
+All std::vector operations are valid, because `row` is a std::vector of `field_type`.
+
+Methods of `row` are:
+
+`operator[](size_type idx)`  
+Access the field by its index position in the row.
+
+`operator[](const char* colname)`  
+Access the field by its column name.
+
+`num_fields()`  
+Returns the field count of the row. (A wrapper for size())
+
+
+### result
+This class is a std::vector of `row`. It represents a complete result set.
+
+Methods of `result` are:
+
+`num_rows()`  
+Returns the number of rows of the result. (A wrapper for size())
+
+
+### db
+Main class that holds the sqlite3 object, which can be accessed via `get()` or, even shorter, via the `()` operator.
+
+Methods of `db` are:
+
+`db(name, initial_open = true, flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE)`  
+Ctor which creates and optionally opens the database.
+
+`open(flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE)`  
+Opens the database with the apropriate access flags.
+
+`close()`  
+Closes the db. The db is automatically closed when db goes out of scope.
+
+`version()`  
+Returns the version of the SQLite3 database as string.
+
+`vacuum()`  
+Executes the SQLite VACUUM command for database defragmentation.
+
+
+### query
+Class for query assembly and execution.
+The `<<` operator can add query parts or bind BLOB and TEXT data.
+
+`exec()`  
+Executes the query and returns only the execution status. This can be used for commands like UPDATE or DELETE.
+
+`use()`  
+Executes the query and returns the first row of the result set. This can be uses if only one row is needed or to get the result set row by row.
+Repeatly call `use_next()` until `use_next()` returns an empty row or call `use_abort()` before.
+
+`use_next()`  
+Returns the next row of the `use()` function.
+An empty row is returned if no further rows exist.
+
+`use_abort()`  
+Aborts `use()`/`use_next()` sequence before `use_next()` finished (returned an empty row).
+This is a **MANDATORY** call if `use()`/`use_next()` need to be aborted.
+
+`store()`  
+Executes the query and returns the complete result as result object.
+
+`bind()`  
+Binds the given vector or string to the according params.
+CAUTION: The vector or string must be constant until end of query execution!
+The vector/string is internally not copied!
+
+
+### transaction
+The `transaction` class simplifies begin, commit and rollback of transactions.
+`begin()` is called by class ctor, so an explicit `begin()` isn't necessary.
+
+Methods are:
+
+`begin()`  
+Begin the transaction with the according level flags. Default is deferred.
+
+`commit()`  
+Commit the transaction.
+
+`rollback()`  
+Rollback the transaction. Rollback is called by the dtor when transaction object goes out of scope.
+
+
 ## License
-sqlitepp is LGPLv3
+sqlitepp is LGPLv3  
 SQLite3 is public domain
