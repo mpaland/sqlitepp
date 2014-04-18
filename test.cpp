@@ -26,7 +26,7 @@
 #include <iostream>
 #include <AtlBase.h>    // for string conversion to UTF-8 in Windows
 
-#include "sqlitepp/sqlitepp.h"
+#include "sqlitepp.h"
 
 // defines the test database file - here in memory
 #define TEST_DB ":memory:"
