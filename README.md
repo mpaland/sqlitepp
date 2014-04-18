@@ -3,16 +3,21 @@ sqlitepp is a C++ and STL orientated single header wrapper around the fantastic 
 It simplyfies the C API by using BLOBs as vectors and TEXT as strings and makes accessing result objects easy.
 To provide a single versioned library the SQLite3 is included in the SQLite3 folder and updated when necessary.
 
+Design goals:
+- easy to use
+- LINT and compiler L4 warning free
+- usage of C++ and STL (vector, string)
+
 
 ## Usage
-This are examples how to use sqlitepp.
+Examples how to use sqlitepp.
 
 Create and open the database by its filename:
 ```c++
 sqlitepp::db db("D:/test.sqlite");
 assert(db.is_open());
 ```
-The following code asumes this db object.
+The following code asumes this created db object.
 
 Create a query and set the command in the ctor:
 ```c++
