@@ -3,7 +3,7 @@
 ///             2014, PALANDesign Hannover, Germany
 ///
 /// \license LGPLv3
-/// This file is part of the decom library.
+/// This file is part of the sqlitepp project.
 /// sqlitepp is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU Lesser Public License as published by
 /// the Free Software Foundation, either version 3 of the License, or
@@ -13,7 +13,7 @@
 /// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 /// GNU Lesser Public License for more details.
 /// You should have received a copy of the GNU Lesser Public License
-/// along with decom. If not, see <http://www.gnu.org/licenses/>.
+/// along with sqlitepp. If not, see <http://www.gnu.org/licenses/>.
 ///
 ///
 /// \brief sqlitepp examples for function/access demonstration
@@ -28,15 +28,16 @@
 
 #include "sqlitepp/sqlitepp.h"
 
-// defines the test database file
-#define TEST_DB "d:/test.sqlite"
+// defines the test database file - here in memory
+#define TEST_DB ":memory:"
 
 
 int main()
 {
   sqlitepp::db db(TEST_DB);
-  std::cout << "test - SQLite version: " << db.version() << std::endl;
   assert(db.is_open());
+  std::cout << "test - SQLite3  version: " << db.version() << std::endl;
+  std::cout << "test - sqlitepp version: " << SQLITEPP_VERSION << std::endl;
 
   int err;
 
@@ -115,7 +116,7 @@ int main()
   for (sqlitepp::result::size_type r = 0; r < res.num_rows(); ++r) {
     for (sqlitepp::row::size_type c = 0; c < res[r].num_fields(); ++c) {
       if (!res[r][c].is_null()) {
-        std::cout << res[r][c].str() << " |";
+        std::cout << (std::string)res[r][c] << " |";
       }
     }
     std::cout << std::endl;
@@ -127,7 +128,7 @@ int main()
   while (!_row.empty()) {
     for (sqlitepp::row::size_type c = 0; c < _row.num_fields(); ++c) {
       if (!_row[c].is_null()) {
-        std::cout << _row[c].str() << " |";
+        std::cout << (std::string)_row[c] << " |";
       }
     }
     std::cout << std::endl;

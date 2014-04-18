@@ -12,14 +12,14 @@
 /// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 /// GNU Lesser Public License for more details.
 /// You should have received a copy of the GNU Lesser Public License
-/// along with decom. If not, see <http://www.gnu.org/licenses/>.
+/// along with sqlitepp. If not, see <http://www.gnu.org/licenses/>.
 ///
 ///
 /// \brief sqlitepp classes
-/// sqlitepp is a single header C++ wrapper for SQLite3
+/// sqlitepp is a single header C++ wrapper for the SQLite3 db
 ///
 /// \changelog
-/// 1.6.0   Removed str() function, it's implicit now via operator
+/// 1.6.0   Removed str() function, it's implicit now via conversion operator
 ///
 /// 1.5.0   Added 'invalid' type (-1) for field_type
 ///         row [""] operator can return invalid ref as invalid field_type now
@@ -331,7 +331,7 @@ public:
   // call this if use()/use_next() should be aborted before use_next() finished (returned an empty row)
   // this is a mandatory call!
   int use_abort() {
-    return::sqlite3_finalize(stmt_);
+    return ::sqlite3_finalize(stmt_);
   }
 
   // use "store()" if you want to get the complete result in memory
