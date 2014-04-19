@@ -17,7 +17,7 @@ Create and open the database by its filename:
 sqlitepp::db db("D:/test.sqlite");
 assert(db.is_open());
 ```
-The following code asumes this created db object.
+The following code assumes the `db` object created above.
 
 Create a query and set the command in the ctor:
 ```c++
@@ -31,7 +31,7 @@ sqlitepp::query q(db, "THIS QUERY IS DISCARDED");
 int err = q.exec("CREATE TABLE test (id INTEGER PRIMARY KEY NOT NULL, num INTEGER, name VARCHAR(20), flo FLOAT, data BLOB, comment TEXT);");
 ```
 
-Insert a BLOB in the table and via explicit binding:
+Insert a BLOB via explicit binding:
 ```c++
 std::vector<std::uint8_t> blob(30U);
 sqlitepp::query q(db);
@@ -68,7 +68,7 @@ int err = q.exec();
 ```
 
 All text and string values need to be in UTF-8 format in SQLite3.
-Storing a string in UTF-8 - here on a Windows platform with ATL conversion:
+Storing a string in UTF-8 - here on a Windows platform - with ATL conversion:
 ```c++
 sqlitepp::query q(db);
 q << "INSERT INTO test(id, name) VALUES (13,'" << ATL::CT2CA(L"Sch�ne Gr��e", CP_UTF8) << "')";
@@ -84,7 +84,7 @@ q << " WHERE id=2";
 int err = q.exec();
 ```
 
-Sometime after exessive delete and insert operations it's useful to defragment/compact the database, which is done by the `vacuum()` command.
+Sometime after excessive delete and insert operations, it's useful to defragment/compact the database, which is done by the `vacuum()` command.
   // database defragmentation (e.g. after exessive deletes etc.)
 ```c++
 int err = db.vacuum();
@@ -176,7 +176,7 @@ q.exec("INSERT INTO test(name) VALUES ('I'm not stored')");
 tr.rollback();
 ```
 
-Rollback when the transaction goes out scope:
+Auto rollback when the transaction goes out scope:
 ```c++
 {
   sqlitepp::transaction tr(db);  // implicit begin
