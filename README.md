@@ -4,13 +4,14 @@ It simplyfies the C API by using BLOBs as vectors and TEXT as strings and makes 
 To provide a single versioned library the SQLite3 is included in the SQLite3 folder and updated when necessary.
 
 Design goals:
-- easy to use
-- LINT and compiler L4 warning free
+- very easy to use, just a single header
+- LINT and compiler L4 warning free, clean code
 - usage of C++ and STL (vector, string)
+- MIT license
 
 
 ## Usage
-Examples how to use sqlitepp.
+Here are some examples how to use sqlitepp:
 
 Create and open the database by its filename:
 ```c++
@@ -71,7 +72,7 @@ All text and string values need to be in UTF-8 format in SQLite3.
 Storing a string in UTF-8 - here on a Windows platform - with ATL conversion:
 ```c++
 sqlitepp::query q(db);
-q << "INSERT INTO test(id, name) VALUES (13,'" << ATL::CT2CA(L"Sch�ne Gr��e", CP_UTF8) << "')";
+q << "INSERT INTO test(id, name) VALUES (13,'" << ATL::CT2CA(L"Schöne Grüße", CP_UTF8) << "')";
 int err = q.exec();
 ```
 
@@ -85,8 +86,8 @@ int err = q.exec();
 ```
 
 Sometime after excessive delete and insert operations, it's useful to defragment/compact the database, which is done by the `vacuum()` command.
-  // database defragmentation (e.g. after exessive deletes etc.)
 ```c++
+// database defragmentation (e.g. after exessive deletes etc.)
 int err = db.vacuum();
 ```
 
@@ -316,5 +317,5 @@ Rollback the transaction. Rollback is called by the dtor when transaction object
 
 
 ## License
-sqlitepp is LGPLv3  
-SQLite3 is public domain
+sqlitepp is MIT
+SQLite3  is public domain
