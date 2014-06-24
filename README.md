@@ -317,5 +317,5 @@ Rollback the transaction. Rollback is called by the dtor when transaction object
 
 
 ## License
-sqlitepp is MIT
-SQLite3  is public domain
+sqlitepp is **MIT**  
+SQLite3  is **public domain**
