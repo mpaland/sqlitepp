@@ -2,23 +2,32 @@
 /// \author (c) Marco Paland (marco@paland.com)
 ///             2014, PALANDesign Hannover, Germany
 ///
-/// \license LGPLv3
-/// sqlitepp is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU Lesser Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-/// sqlitepp is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-/// GNU Lesser Public License for more details.
-/// You should have received a copy of the GNU Lesser Public License
-/// along with sqlitepp. If not, see <http://www.gnu.org/licenses/>.
+/// \license The MIT License (MIT)
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in
+/// all copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+/// THE SOFTWARE.
 ///
 ///
 /// \brief sqlitepp classes
 /// sqlitepp is a single header C++ wrapper for the SQLite3 db
 ///
 /// \changelog
+/// 1.6.1   Changed license to MIT
+///
 /// 1.6.0   Removed str() function, it's implicit now via conversion operator
 ///
 /// 1.5.0   Added 'invalid' type (-1) for field_type
@@ -46,8 +55,8 @@
 #ifndef _SQLITEPP_H_
 #define _SQLITEPP_H_
 
-#define SQLITEPP_VERSION        "1.6.0"
-#define SQLITEPP_VERSION_NUMBER 1006000   // (X*1000000 + Y*1000 + Z)
+#define SQLITEPP_VERSION        "1.6.1"     // X.Y.Z
+#define SQLITEPP_VERSION_NUMBER 1006001     // X*1000000 + Y*1000 + Z
 
 #include "sqlite3/sqlite3.h"
 
