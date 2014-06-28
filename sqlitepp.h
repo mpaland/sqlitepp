@@ -58,7 +58,7 @@
 #define SQLITEPP_VERSION        "1.6.1"     // X.Y.Z
 #define SQLITEPP_VERSION_NUMBER 1006001     // X*1000000 + Y*1000 + Z
 
-#include "sqlite3/sqlite3.h"
+#include "thirdparty/sqlite3.h"
 
 #include <vector>
 #include <string>
